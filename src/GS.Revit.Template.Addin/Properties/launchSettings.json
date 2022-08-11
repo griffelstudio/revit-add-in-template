@@ -1,0 +1,34 @@
+{
+  "profiles": {
+    "2018": {
+      "commandName": "Executable",
+      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2018\\Revit.exe",
+      "commandLineArgs": "$(SolutionDir)\\tests\\TestProject2018.rvt"
+    },
+    "2019": {
+      "commandName": "Executable",
+      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2019\\Revit.exe",
+      "commandLineArgs": ""
+    },
+    "2020": {
+      "commandName": "Executable",
+      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2020\\Revit.exe",
+      "commandLineArgs": ""
+    },
+    "2021": {
+      "commandName": "Executable",
+      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2021\\Revit.exe",
+      "commandLineArgs": "$(SolutionDir)\\tests\\TestProject2021.rvt"
+    },
+    "2022": {
+      "commandName": "Executable",
+      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2022\\Revit.exe",
+      "commandLineArgs": ""
+    },
+    "2023": {
+      "commandName": "Executable",
+      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2023\\Revit.exe",
+      "commandLineArgs": ""
+    }
+  }
+}

@@ -1,0 +1,65 @@
+<Project>
+
+	<PropertyGroup>
+		<Company>Griffel Studio</Company>
+		<Authors>Kiryl A</Authors>
+		<Product>Template</Product>
+		<Version>0.0.1</Version>
+		<Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)) Griffel Studio LLC - All Rights Reserved</Copyright>
+	</PropertyGroup>
+
+	<!--Projects properties-->
+	<PropertyGroup>
+		<Configurations>Debug;Release;JustBuild</Configurations>
+		<PlatformTarget>x64</PlatformTarget>
+		<Platforms>x64</Platforms>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		<TargetFrameworks>net461;net47;net471;net48</TargetFrameworks>
+		<LangVersion>preview</LangVersion>
+		<BuildInParallel>false</BuildInParallel>
+		<UseWPF>True</UseWPF>
+		<IsPackable>false</IsPackable>
+		<!--Force the project to use the legacy debugger engine-->
+		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>
+	</PropertyGroup>
+
+	<!--Define constants depending on Revit version-->
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
+		<RevitVersion>2018</RevitVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net47' ">
+		<RevitVersion>2019</RevitVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net471' ">
+		<RevitVersion>2020</RevitVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+		<RevitVersion>2021</RevitVersion>
+	</PropertyGroup>
+
+	<!--In 'JustBuild' configuration build only one target-->
+	<PropertyGroup Condition="'$(Configuration)' == 'JustBuild'">
+		<TargetFrameworks>net48</TargetFrameworks>
+	</PropertyGroup>
+
+	<!--Output related settings-->
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>$(SolutionDir)\bin\$(Configuration)\$(RevitVersion)</OutputPath>
+		<RevitAddinsPath>$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)</RevitAddinsPath>
+		<DefineConstants>DEBUG;REVIT$(RevitVersion)</DefineConstants>
+	</PropertyGroup>
+
+	<!--Reference Revit API dlls-->
+	<ItemGroup>
+		<Reference Include="RevitAPI">
+			<HintPath>..\..\libs\GS.Revit.SDK\$(RevitVersion)\RevitAPI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="RevitAPIUI">
+			<HintPath>..\..\libs\GS.Revit.SDK\$(RevitVersion)\RevitAPIUI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+</Project>

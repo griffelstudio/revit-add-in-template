@@ -1,0 +1,111 @@
+<Project>
+
+	<!--Build for framework 4.8 two more times to get plugin versions for Revit 2022 and 2023-->
+	<Target Name="Build2022"
+			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
+			BeforeTargets="DispatchToInnerBuilds">
+		<MSBuild
+			Projects="$(AssemblyName).csproj"
+			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2022">
+		</MSBuild>
+	</Target>
+
+	<Target Name="Build2023"
+			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
+			BeforeTargets="DispatchToInnerBuilds">
+		<MSBuild
+			Projects="$(AssemblyName).csproj"
+			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2023">
+		</MSBuild>
+	</Target>
+
+	<!--Create Revit add-in manifest-->
+	<Target Name="CreateAddinManifest"
+			Condition="$(AssemblyName.EndsWith('Addin'))"
+			AfterTargets="AfterBuild">
+		<ItemGroup>
+			<!--We don't need .addin extension at the end of file name as the project name ends with .Addin already-->
+			<AddinManifest Include="$(OutputPath)\$(AssemblyName)"/>
+			<Line Include="line01">
+				<Text>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;</Text>
+			</Line>
+			<Line Include="line02">
+				<Text>&lt;RevitAddIns&gt;</Text>
+			</Line>
+			<Line Include="line03">
+				<Text>&#09;&lt;AddIn Type="Application"&gt;</Text>
+			</Line>
+
+			<!--Set different paths to dlls in Debug and Release configuration-->
+			<Line Include="line04" Condition="'$(Configuration)' == 'Debug'">
+				<Text>&#09;&#09;&lt;Assembly&gt;$([System.IO.Path]::GetFullPath('$(OutputPath)'))$(AssemblyName).dll&lt;/Assembly&gt;</Text>
+			</Line>
+			<Line Include="line04" Condition="'$(Configuration)' == 'Release'">
+				<Text>&#09;&#09;&lt;Assembly&gt;.\$(AssemblyName).dll&lt;/Assembly&gt;</Text>
+			</Line>
+
+			<Line Include="line05">
+				<Text>&#09;&#09;&lt;ClientId&gt;B70F2556-8A41-4936-9D4A-020E5745FBF2&lt;/ClientId&gt;</Text>
+			</Line>
+			<Line Include="line06">
+				<Text>&#09;&#09;&lt;FullClassName&gt;$(RootNamespace).Application&lt;/FullClassName&gt;</Text>
+			</Line>
+			<Line Include="line07">
+				<Text>&#09;&#09;&lt;Name&gt;$(Product)&lt;/Name&gt;</Text>
+			</Line>
+			<Line Include="line08">
+				<Text>&#09;&#09;&lt;VendorId&gt;Griffel Studio&lt;/VendorId&gt;</Text>
+			</Line>
+			<Line Include="line09">
+				<Text>&#09;&#09;&lt;VendorDescription&gt;www.griffelstudio.com, contact@griffelstudio.com&lt;/VendorDescription&gt;</Text>
+			</Line>
+			<Line Include="line10">
+				<Text>&#09;&lt;/AddIn&gt;</Text>
+			</Line>
+			<Line Include="line11">
+				<Text>&lt;/RevitAddIns&gt;</Text>
+			</Line>
+		</ItemGroup>
+		<Message
+			Importance="high"
+			Text="Create Revit add-in manifest file."/>
+		<WriteLinesToFile
+			File="@(AddinManifest)"
+			Lines="@(Line->'%(Text)')"
+			Overwrite="true"
+			Encoding="utf-8"/>
+	</Target>
+
+	<!--Delete manifest file-->
+	<Target Name="DeleteAddinManifest"
+			Condition="('$(Configuration)' != 'Debug') And $(AssemblyName.EndsWith('Addin'))"
+			AfterTargets="AfterBuild">
+		<ItemGroup>
+			<AddinManifest Include="$(RevitAddinsPath)\$(AssemblyName)"/>
+		</ItemGroup>
+		<Message
+			Importance="high"
+			Text="Remove manifest file: @(AddinManifest)"/>
+		<Delete Files="@(AddinManifest)"/>
+	</Target>
+
+	<!--Copy manifest file-->
+	<Target Name="CopyManifestFile"
+			Condition="'$(Configuration)' == 'Debug' AND $(AssemblyName.EndsWith('Addin'))"
+			AfterTargets="CreateAddinManifest">
+		<ItemGroup>
+			<AddinFile Include="$(OutputPath)\*.Addin" />
+		</ItemGroup>
+		<Copy
+			SourceFiles="@(AddinFile)"
+			DestinationFolder="$(RevitAddinsPath)"
+			SkipUnchangedFiles="true"
+			OverwriteReadOnlyFiles="true"
+			Retries="3"
+			RetryDelayMilliseconds="500" />
+		<Message
+			Importance="high"
+			Text="Copy manifest file to $(RevitAddinsPath)"/>
+	</Target>
+
+</Project>

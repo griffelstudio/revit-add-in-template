@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<ItemGroup>
+		<Reference Include="System.Web" />
+		<Reference Include="System.Web.Extensions" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Entitlement.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Entitlement.settings</DependentUpon>
+		</Compile>
+		<None Update="Properties\Entitlement.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Entitlement.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+</Project>

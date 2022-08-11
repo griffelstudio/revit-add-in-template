@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net48</TargetFrameworks>
+		<OutputPath>bin\$(TargetFramework)</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\GS.Revit.Template.Addin\GS.Revit.Template.Addin.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+		<PackageReference Include="NUnit" Version="3.*" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.*" />
+		<PackageReference Include="NUnit.Analyzers" Version="3.*" />
+		<PackageReference Include="coverlet.collector" Version="3.*" />
+	</ItemGroup>
+
+</Project>
