@@ -85,7 +85,7 @@
 		</ItemGroup>
 		<Message
 			Importance="high"
-			Text="Remove manifest file: @(AddinManifest)"/>
+			Text="Remove manifest file: @(AddinManifest)."/>
 		<Delete Files="@(AddinManifest)"/>
 	</Target>
 
@@ -105,7 +105,7 @@
 			RetryDelayMilliseconds="500" />
 		<Message
 			Importance="high"
-			Text="Copy manifest file to $(RevitAddinsPath)"/>
+			Text="Copy manifest file to $(RevitAddinsPath)."/>
 	</Target>
 
 </Project>
