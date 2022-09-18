@@ -53,11 +53,11 @@
 	<!--Reference Revit API dlls-->
 	<ItemGroup>
 		<Reference Include="RevitAPI">
-			<HintPath>..\..\libs\GS.Revit.SDK\$(RevitVersion)\RevitAPI.dll</HintPath>
+			<HintPath>..\..\libs\Revit API\$(RevitVersion)\RevitAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="RevitAPIUI">
-			<HintPath>..\..\libs\GS.Revit.SDK\$(RevitVersion)\RevitAPIUI.dll</HintPath>
+			<HintPath>..\..\libs\Revit API\$(RevitVersion)\RevitAPIUI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
