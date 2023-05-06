@@ -4,8 +4,8 @@
 		<Company>Griffel Studio</Company>
 		<Authors>Kiryl A</Authors>
 		<Product>Template</Product>
-		<Version>0.0.1</Version>
-		<Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)) Griffel Studio LLC - All Rights Reserved</Copyright>
+		<Version>$([System.DateTime]::Now.ToString(yyyy.M.d.H))</Version>
+		<Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)) $(Company) - All Rights Reserved</Copyright>
 	</PropertyGroup>
 
 	<!--Projects properties-->
@@ -39,25 +39,32 @@
 
 	<!--In 'JustBuild' configuration build only one target-->
 	<PropertyGroup Condition="'$(Configuration)' == 'JustBuild'">
+		<DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
 		<TargetFrameworks>net48</TargetFrameworks>
+		<RevitVersion>2024</RevitVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>None</DebugType>
 	</PropertyGroup>
 
 	<!--Output related settings-->
 	<PropertyGroup>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>$(SolutionDir)\bin\$(Configuration)\$(RevitVersion)</OutputPath>
-		<RevitAddinsPath>$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)</RevitAddinsPath>
-		<DefineConstants>DEBUG;REVIT$(RevitVersion)</DefineConstants>
+		<OutputPath>$(SolutionDir)bin\$(Configuration)\$(RevitVersion)</OutputPath>
+		<DefineConstants>$(DefineConstants);REVIT$(RevitVersion)</DefineConstants>
+		<RevitAddinsPath>$(AppData)Autodesk\Revit\Addins\$(RevitVersion)</RevitAddinsPath>
 	</PropertyGroup>
 
 	<!--Reference Revit API dlls-->
 	<ItemGroup>
 		<Reference Include="RevitAPI">
-			<HintPath>..\..\libs\Revit API\$(RevitVersion)\RevitAPI.dll</HintPath>
+			<HintPath>$(SolutionDir)libs\Revit API\$(RevitVersion)\RevitAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="RevitAPIUI">
-			<HintPath>..\..\libs\Revit API\$(RevitVersion)\RevitAPIUI.dll</HintPath>
+			<HintPath>$(SolutionDir)libs\Revit API\$(RevitVersion)\RevitAPIUI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

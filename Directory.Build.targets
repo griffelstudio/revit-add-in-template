@@ -1,21 +1,28 @@
 <Project>
 
-	<!--Build for framework 4.8 two more times to get plugin versions for Revit 2022 and 2023-->
-	<Target Name="Build2022"
+	<!--Build for framework 4.8 as many times as many latest Revit versions supports this framework.-->
+	<Target Name="Build2024"
 			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
 			BeforeTargets="DispatchToInnerBuilds">
 		<MSBuild
 			Projects="$(AssemblyName).csproj"
-			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2022">
+			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2024">
 		</MSBuild>
 	</Target>
-
 	<Target Name="Build2023"
 			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
 			BeforeTargets="DispatchToInnerBuilds">
 		<MSBuild
 			Projects="$(AssemblyName).csproj"
 			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2023">
+		</MSBuild>
+	</Target>
+	<Target Name="Build2022"
+			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
+			BeforeTargets="DispatchToInnerBuilds">
+		<MSBuild
+			Projects="$(AssemblyName).csproj"
+			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2022">
 		</MSBuild>
 	</Target>
 
