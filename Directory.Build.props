@@ -69,4 +69,14 @@
 		</Reference>
 	</ItemGroup>
 
+	<!--<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="9.0.1" Condition="'RevitVersion' == '2018'" Private="false"/>
+		<PackageReference Include="Newtonsoft.Json" Version="9.0.1" Condition="'RevitVersion' == '2019'" Private="false"/>
+		<PackageReference Include="Newtonsoft.Json" Version="9.0.1" Condition="'RevitVersion' == '2020'" Private="false"/>
+		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" Condition="'RevitVersion' == '2021'" Private="false"/>
+		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" Condition="'RevitVersion' == '2022'" Private="false"/>
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" Condition="'RevitVersion' == '2023'" Private="false"/>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" Condition="'RevitVersion' == '2024'" Private="false"/>
+	</ItemGroup>-->
+
 </Project>
