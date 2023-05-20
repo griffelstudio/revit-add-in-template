@@ -28,7 +28,7 @@
 
 	<!--Create Revit add-in manifest-->
 	<Target Name="CreateAddinManifest"
-			Condition="$(AssemblyName.EndsWith('Addin'))"
+			Condition="'$(Configuration)' != 'JustBuild' AND $(AssemblyName.EndsWith('Addin'))"
 			AfterTargets="AfterBuild">
 		<ItemGroup>
 			<!--We don't need .addin extension at the end of file name as the project name ends with .Addin already-->
@@ -52,7 +52,7 @@
 			</Line>
 
 			<Line Include="line05">
-				<Text>&#09;&#09;&lt;ClientId&gt;B70F2556-8A41-4936-9D4A-020E5745FBF2&lt;/ClientId&gt;</Text>
+				<Text>&#09;&#09;&lt;ClientId&gt;$([System.Guid]::NewGuid())&lt;/ClientId&gt;</Text>
 			</Line>
 			<Line Include="line06">
 				<Text>&#09;&#09;&lt;FullClassName&gt;$(RootNamespace).Application&lt;/FullClassName&gt;</Text>
@@ -61,10 +61,10 @@
 				<Text>&#09;&#09;&lt;Name&gt;$(Product)&lt;/Name&gt;</Text>
 			</Line>
 			<Line Include="line08">
-				<Text>&#09;&#09;&lt;VendorId&gt;Griffel Studio&lt;/VendorId&gt;</Text>
+				<Text>&#09;&#09;&lt;VendorId&gt;$(Company)&lt;/VendorId&gt;</Text>
 			</Line>
 			<Line Include="line09">
-				<Text>&#09;&#09;&lt;VendorDescription&gt;www.griffelstudio.com, contact@griffelstudio.com&lt;/VendorDescription&gt;</Text>
+				<Text>&#09;&#09;&lt;VendorDescription&gt;$(WebPage), $(SupportUrl)&lt;/VendorDescription&gt;</Text>
 			</Line>
 			<Line Include="line10">
 				<Text>&#09;&lt;/AddIn&gt;</Text>
@@ -75,7 +75,7 @@
 		</ItemGroup>
 		<Message
 			Importance="high"
-			Text="Create Revit add-in manifest file."/>
+			Text=" Create Revit add-in manifest file: @(AddinManifest)."/>
 		<WriteLinesToFile
 			File="@(AddinManifest)"
 			Lines="@(Line->'%(Text)')"
@@ -85,34 +85,27 @@
 
 	<!--Delete manifest file-->
 	<Target Name="DeleteAddinManifest"
-			Condition="('$(Configuration)' != 'Debug') And $(AssemblyName.EndsWith('Addin'))"
-			AfterTargets="AfterBuild">
+			Condition="('$(Configuration)' == 'Debug') And $(AssemblyName.EndsWith('Addin'))"
+			AfterTargets="Clean">
 		<ItemGroup>
 			<AddinManifest Include="$(RevitAddinsPath)\$(AssemblyName)"/>
 		</ItemGroup>
 		<Message
 			Importance="high"
-			Text="Remove manifest file: @(AddinManifest)."/>
+			Text=" Delete manifest file: @(AddinManifest)."/>
 		<Delete Files="@(AddinManifest)"/>
+		<!--TODO: It doesn't remove manifests for Revit 2022-2024.-->
 	</Target>
-
-	<!--Copy manifest file-->
-	<Target Name="CopyManifestFile"
-			Condition="'$(Configuration)' == 'Debug' AND $(AssemblyName.EndsWith('Addin'))"
-			AfterTargets="CreateAddinManifest">
+	<Target Name="DeleteOneAddinManifest"
+			Condition="('$(Configuration)' == 'JustBuild') And $(AssemblyName.EndsWith('Addin'))"
+			BeforeTargets="DispatchToInnerBuilds">
 		<ItemGroup>
-			<AddinFile Include="$(OutputPath)\*.Addin" />
+			<AddinManifest Include="$(RevitAddinsPath)\$(AssemblyName)"/>
 		</ItemGroup>
-		<Copy
-			SourceFiles="@(AddinFile)"
-			DestinationFolder="$(RevitAddinsPath)"
-			SkipUnchangedFiles="true"
-			OverwriteReadOnlyFiles="true"
-			Retries="3"
-			RetryDelayMilliseconds="500" />
 		<Message
 			Importance="high"
-			Text="Copy manifest file to $(RevitAddinsPath)."/>
+			Text=" Delete manifest file: @(AddinManifest)."/>
+		<Delete Files="@(AddinManifest)"/>
 	</Target>
 
 </Project>

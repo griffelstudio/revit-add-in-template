@@ -1,11 +1,14 @@
 <Project>
 
 	<PropertyGroup>
+		<!--Most of these properties are used in generated .addin manifest file.-->
 		<Company>Griffel Studio</Company>
 		<Authors>Kiryl A</Authors>
-		<Product>Template</Product>
+		<Product>Revit Add-in Template</Product>
 		<Version>$([System.DateTime]::Now.ToString(yyyy.M.d.H))</Version>
 		<Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)) $(Company) - All Rights Reserved</Copyright>
+		<SupportUrl>contact@griffelstudio.com</SupportUrl>
+		<WebPage>https://griffelstudio.com</WebPage>
 	</PropertyGroup>
 
 	<!--Projects properties-->
@@ -54,7 +57,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)bin\$(Configuration)\$(RevitVersion)</OutputPath>
 		<DefineConstants>$(DefineConstants);REVIT$(RevitVersion)</DefineConstants>
-		<RevitAddinsPath>$(AppData)Autodesk\Revit\Addins\$(RevitVersion)</RevitAddinsPath>
+		<RevitAddinsPath>$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)</RevitAddinsPath>
 	</PropertyGroup>
 
 	<!--Reference Revit API dlls-->
