@@ -108,4 +108,17 @@
 		<Delete Files="@(AddinManifest)"/>
 	</Target>
 
+	<!--When the last version is built, create ZIP archive with outputs which can be submitted to the Autodesk App Store-->
+	<Target Name="ZipOutputs"
+			Condition="'$(Configuration)' == 'Release' AND $(AssemblyName.EndsWith('Addin')) AND '$(TargetFramework)' == 'net461'"
+			AfterTargets="CreateAddinManifest">
+		<Message
+			Importance="high"
+			Text=" Zipping release..."/>
+		<ZipDirectory
+            SourceDirectory="$(SolutionDir)bin\$(Configuration)"
+            DestinationFile="$(SolutionDir)submissions\$(Product)$(Version).zip"
+			Overwrite="false" />
+	</Target>
+
 </Project>
