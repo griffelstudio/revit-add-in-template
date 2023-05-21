@@ -2,26 +2,26 @@
 
 	<!--Build for framework 4.8 as many times as many latest Revit versions supports this framework.-->
 	<Target Name="Build2024"
-			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
+			Condition="!$(MSBuildProjectName.EndsWith('Tests')) AND '$(Configuration)' != 'JustBuild'"
 			BeforeTargets="DispatchToInnerBuilds">
 		<MSBuild
-			Projects="$(AssemblyName).csproj"
+			Projects="$(MSBuildProjectName).csproj"
 			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2024">
 		</MSBuild>
 	</Target>
 	<Target Name="Build2023"
-			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
+			Condition="!$(MSBuildProjectName.EndsWith('Tests')) AND '$(Configuration)' != 'JustBuild'"
 			BeforeTargets="DispatchToInnerBuilds">
 		<MSBuild
-			Projects="$(AssemblyName).csproj"
+			Projects="$(MSBuildProjectName).csproj"
 			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2023">
 		</MSBuild>
 	</Target>
 	<Target Name="Build2022"
-			Condition="!$(AssemblyName.Contains('Tests')) And '$(Configuration)' != 'JustBuild'"
+			Condition="!$(MSBuildProjectName.EndsWith('Tests')) AND '$(Configuration)' != 'JustBuild'"
 			BeforeTargets="DispatchToInnerBuilds">
 		<MSBuild
-			Projects="$(AssemblyName).csproj"
+			Projects="$(MSBuildProjectName).csproj"
 			Properties="Configuration=$(Configuration);TargetFramework=net48;RevitVersion=2022">
 		</MSBuild>
 	</Target>
@@ -32,7 +32,8 @@
 			AfterTargets="AfterBuild">
 		<ItemGroup>
 			<!--We don't need .addin extension at the end of file name as the project name ends with .Addin already-->
-			<AddinManifest Include="$(OutputPath)\$(AssemblyName)"/>
+			<AddinManifest Include="$(RevitAddinsPath)\$(AssemblyName)" Condition="'$(Configuration)' == 'Debug'"/>
+			<AddinManifest Include="$(OutputPath)\$(AssemblyName)" Condition="'$(Configuration)' == 'Release'"/>
 			<Line Include="line01">
 				<Text>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;</Text>
 			</Line>
@@ -85,24 +86,26 @@
 
 	<!--Delete manifest file-->
 	<Target Name="DeleteAddinManifest"
-			Condition="('$(Configuration)' == 'Debug') And $(AssemblyName.EndsWith('Addin'))"
+			Condition="'$(Configuration)' == 'Debug' AND $(AssemblyName.EndsWith('Addin'))"
 			AfterTargets="Clean">
 		<ItemGroup>
 			<AddinManifest Include="$(RevitAddinsPath)\$(AssemblyName)"/>
 		</ItemGroup>
 		<Message
+			Condition="Exists(@(AddinManifest))"
 			Importance="high"
 			Text=" Delete manifest file: @(AddinManifest)."/>
 		<Delete Files="@(AddinManifest)"/>
 		<!--TODO: It doesn't remove manifests for Revit 2022-2024.-->
 	</Target>
 	<Target Name="DeleteOneAddinManifest"
-			Condition="('$(Configuration)' == 'JustBuild') And $(AssemblyName.EndsWith('Addin'))"
+			Condition="'$(Configuration)' == 'JustBuild' AND $(AssemblyName.EndsWith('Addin'))"
 			BeforeTargets="DispatchToInnerBuilds">
 		<ItemGroup>
 			<AddinManifest Include="$(RevitAddinsPath)\$(AssemblyName)"/>
 		</ItemGroup>
 		<Message
+			Condition="Exists(@(AddinManifest))"
 			Importance="high"
 			Text=" Delete manifest file: @(AddinManifest)."/>
 		<Delete Files="@(AddinManifest)"/>
@@ -114,11 +117,15 @@
 			AfterTargets="CreateAddinManifest">
 		<Message
 			Importance="high"
+			Text=" "/>
+		<MakeDir Directories="$(SolutionDir)submissions"/>
+		<Message
+			Importance="high"
 			Text=" Zipping release..."/>
 		<ZipDirectory
             SourceDirectory="$(SolutionDir)bin\$(Configuration)"
             DestinationFile="$(SolutionDir)submissions\$(Product)$(Version).zip"
-			Overwrite="false" />
+			Overwrite="true" />
 	</Target>
 
 </Project>
